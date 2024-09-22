@@ -12,13 +12,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('supports', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->text('message');
-            $table->string('status')->default('open');
-            $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->id('ticket_id');
+    $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+    $table->string('subject');
+    $table->text('message');
+    $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
+    $table->timestamps();
         });
     }
 

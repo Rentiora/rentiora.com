@@ -12,15 +12,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('payment_histories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('car_id');
-            $table->decimal('amount_paid', 8, 2);
-            $table->date('payment_date');
+            $table->id('payment_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('car_id')->constrained('cars')->onDelete('cascade');
+            $table->decimal('amount', 8, 2);
+            $table->timestamp('payment_date');
+            $table->enum('payment_method', ['card', 'paypal', 'bank_transfer']);
+            $table->enum('status', ['completed', 'failed'])->default('completed');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
         });
     }
 
