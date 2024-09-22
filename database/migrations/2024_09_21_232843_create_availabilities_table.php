@@ -12,16 +12,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('availabilities', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('car_id');
+            $table->id('availability_id');
+            $table->foreignId('car_id')->constrained('cars')->onDelete('cascade');
+            $table->enum('status', ['available', 'booked', 'in_maintenance'])->default('available');
             $table->date('available_from');
             $table->date('available_until');
             $table->timestamps();
-
-            $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
         });
     }
-
+  
 
     /**
      * Reverse the migrations.

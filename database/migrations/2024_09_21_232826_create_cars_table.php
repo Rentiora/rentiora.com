@@ -20,6 +20,10 @@ return new class extends Migration
         $table->string('color');
         $table->decimal('price_per_day', 8, 2);
         $table->timestamps();
+        $table->id('car_id');
+        $table->text('description');
+        $table->string('image_url')->nullable();
+        $table->timestamps();
     });
 }
 
