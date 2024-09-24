@@ -2,6 +2,16 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RentController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -86,3 +98,12 @@ Route::prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::post('/', [UserController::class, 'store']);
 });
+// Grouped routes for rents
+Route::prefix('rents')->group(function () {
+    Route::get('/', [RentController::class, 'index']);
+    Route::post('/', [RentController::class, 'store']);
+    Route::get('/{id}', [RentController::class, 'show']);
+    Route::put('/{id}', [RentController::class, 'update']);
+    Route::delete('/{id}', [RentController::class, 'destroy']);
+});
+
