@@ -3,68 +3,68 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Car;
+use App\Models\Rental;
 
 class RentalController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return Rental::all();
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created rental in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'car_id' => 'required|exists:cars,car_id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'total_price' => 'required|numeric',
-            'status' => 'required|in:booked,completed,canceled',
+            'car_id' => 'required|exists:cars,id', // Ensure the column name matches the actual column in the cars table
+            'user_id' => 'required|exists:users,id',
+            'rental_date' => 'required|date',
+            'return_date' => 'required|date|after:rental_date',
         ]);
 
-        return Rental::create($request->all());
+        $rental = Rental::create([
+            'car_id' => $request->car_id,
+            'user_id' => $request->user_id,
+            'rental_date' => $request->rental_date,
+            'return_date' => $request->return_date,
+        ]);
+
+        return response()->json($rental, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified rental.
      */
-    public function show(Rental $rental)
+    public function show($id)
     {
-        return $rental;
+        $rental = Rental::findOrFail($id);
+        return response()->json($rental);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified rental in storage.
      */
-    public function update(Request $request, Rental $rental)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'car_id' => 'required|exists:cars,car_id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'total_price' => 'required|numeric',
-            'status' => 'required|in:booked,completed,canceled',
+            'car_id' => 'sometimes|required|exists:cars,id', // Ensure the column name matches the actual column in the cars table
+            'user_id' => 'sometimes|required|exists:users,id',
+            'rental_date' => 'sometimes|required|date',
+            'return_date' => 'sometimes|required|date|after:rental_date',
         ]);
 
+        $rental = Rental::findOrFail($id);
         $rental->update($request->all());
 
-        return $rental;
+        return response()->json($rental);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified rental from storage.
      */
-    public function destroy(Rental $rental)
+    public function destroy($id)
     {
+        $rental = Rental::findOrFail($id);
         $rental->delete();
 
-        return response()->noContent();
+        return response()->json(null, 204);
     }
 }

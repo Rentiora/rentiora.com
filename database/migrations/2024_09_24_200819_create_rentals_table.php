@@ -4,31 +4,34 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateRentalsTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up()
     {
         Schema::create('rentals', function (Blueprint $table) {
-            $table->id('rental_id');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('car_id')->constrained('cars')->onDelete('cascade');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->decimal('total_price', 8, 2);
-            $table->enum('status', ['booked', 'completed', 'canceled'])->default('booked');
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('car_id');
+            $table->date('rental_date');
+            $table->date('return_date');
             $table->timestamps();
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
         });
     }
 
-
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('rentals');
     }
-};
+}

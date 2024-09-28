@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-
 use App\Models\Car;
-
-
 
 class CarController extends Controller
 {
@@ -21,10 +17,11 @@ class CarController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'make' => 'required',
-            'model' => 'required',
+            'make' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
             'year' => 'required|integer',
             'price_per_day' => 'required|numeric',
+            'availability_status' => 'required|in:Available,Booked,Maintenance',
         ]);
 
         $car = Car::create($validatedData);
@@ -41,10 +38,11 @@ class CarController extends Controller
     public function update(Request $request, Car $car)
     {
         $validatedData = $request->validate([
-            'make' => 'required',
-            'model' => 'required',
+            'make' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
             'year' => 'required|integer',
             'price_per_day' => 'required|numeric',
+            'availability_status' => 'required|in:Available,Booked,Maintenance',
         ]);
 
         $car->update($validatedData);

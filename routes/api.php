@@ -10,8 +10,10 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\RentController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FAQController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +26,11 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -47,6 +52,7 @@ Route::prefix('availability')->group(function () {
     Route::put('/{id}', [AvailabilityController::class, 'update']);
     Route::delete('/{id}', [AvailabilityController::class, 'destroy']);
 });
+
 
 // Grouped routes for bookings
 Route::prefix('bookings')->group(function () {
@@ -98,12 +104,21 @@ Route::prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::post('/', [UserController::class, 'store']);
 });
-// Grouped routes for rents
-Route::prefix('rents')->group(function () {
-    Route::get('/', [RentController::class, 'index']);
-    Route::post('/', [RentController::class, 'store']);
-    Route::get('/{id}', [RentController::class, 'show']);
-    Route::put('/{id}', [RentController::class, 'update']);
-    Route::delete('/{id}', [RentController::class, 'destroy']);
-});
 
+
+// Grouped routes for FAQs
+Route::prefix('faqs')->group(function () {
+    Route::get('/', [FAQController::class, 'index']);
+    Route::post('/', [FAQController::class, 'store']);
+    Route::get('/{id}', [FAQController::class, 'show']);
+    Route::put('/{id}', [FAQController::class, 'update']);
+    Route::delete('/{id}', [FAQController::class, 'destroy']);
+});
+// Grouped routes for Rental
+Route::prefix('rentals')->group(function () {
+    Route::get('/', [RentalController::class, 'index']);
+    Route::post('/', [RentalController::class, 'store']);
+    Route::get('/{id}', [RentalController::class, 'show']);
+    Route::put('/{id}', [RentalController::class, 'update']);
+    Route::delete('/{id}', [RentalController::class, 'destroy']);
+});

@@ -6,31 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-  public function up()
-{
-    Schema::create('cars', function (Blueprint $table) {
-        $table->id();
-        $table->string('make');
-        $table->string('model');
-        $table->year('year');
-        $table->string('license_plate')->unique();
-        $table->string('color');
-        $table->decimal('price_per_day', 8, 2);
-        $table->timestamps();
-        $table->id('car_id');
-        $table->text('description');
-        $table->string('image_url')->nullable();
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('cars', function (Blueprint $table) {
+            $table->id();
+            $table->string('make');
+            $table->string('model');
+            $table->year('year');
+            $table->decimal('price_per_day', 8, 2);
+            $table->enum('availability_status', ['Available', 'Booked', 'Maintenance'])->default('Available');
+            $table->timestamps();
+        });
+    }
 
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('cars');
