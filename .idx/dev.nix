@@ -4,7 +4,15 @@
     pkgs.nodejs_20
     pkgs.php81Packages.composer
     pkgs.php81
+    pkgs.mariadb
   ];
+  services = {
+       mysql = {
+         enable = true;
+         # Optionally set a password
+         # password = "your_password";
+       };
+     }; 
   idx.extensions = [
     "svelte.svelte-vscode"
     "vue.volar"
@@ -13,6 +21,7 @@
     previews = {
       web = {
         command = [
+         
           "npm"
           "run"
           "dev"
