@@ -55,4 +55,25 @@ class CarController extends Controller
         $car->delete();
         return response()->json(null, 204);
     }
+
+    // Search cars by make, model, or year
+    public function search(Request $request)
+    {
+        $query = Car::query();
+
+        if ($request->has('make')) {
+            $query->where('make', 'like', '%' . $request->input('make') . '%');
+        }
+
+        if ($request->has('model')) {
+            $query->where('model', 'like', '%' . $request->input('model') . '%');
+        }
+
+        if ($request->has('year')) {
+            $query->where('year', $request->input('year'));
+        }
+
+        $cars = $query->get();
+        return response()->json($cars, 200);
+    }
 }
